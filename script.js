@@ -1,0 +1,317 @@
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Background Hearts Animation
+    const heartsContainer = document.getElementById('hearts-container');
+    function createHeart() {
+        // Limit max hearts on screen
+        if(document.querySelectorAll('.heart').length > 60) return;
+        
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 5 + 7) + 's'; // Between 7s and 12s
+        heartsContainer.appendChild(heart);
+        
+        setTimeout(() => {
+            heart.remove();
+        }, 12000);
+    }
+    // Create new heart every 300ms
+    setInterval(createHeart, 300);
+
+    // 2. Login & Audio Logic
+    const loginBtn = document.getElementById('login-btn');
+    const passwordInput = document.getElementById('password-input');
+    const errorMsg = document.getElementById('error-msg');
+    const loginScreen = document.getElementById('login-screen');
+    const mainContent = document.getElementById('main-content');
+    const bgMusic = document.getElementById('bg-music');
+
+    function attemptLogin() {
+        const pass = passwordInput.value.trim();
+        if (pass === 'بحبك') {
+            // Success
+            errorMsg.classList.add('hidden');
+            
+            // Fade out login screen
+            loginScreen.classList.remove('active');
+            loginScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                loginScreen.style.display = 'none';
+                
+                // Fade in main content
+                mainContent.classList.remove('hidden');
+                mainContent.classList.add('active');
+                
+                // Play music
+                bgMusic.volume = 0.5;
+                bgMusic.play().catch(e => {
+                    console.log("Audio autoplay prevented by browser. User interaction already happened, but ensure audio file exists.");
+                });
+            }, 1000); // the CSS transition is 1s
+            
+        } else {
+            // Error
+            errorMsg.classList.remove('hidden');
+        }
+    }
+
+    loginBtn.addEventListener('click', attemptLogin);
+
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') attemptLogin();
+    });
+
+    // 3. SPA Navigation Logic
+    const navLinks = document.querySelectorAll('.navbar a');
+    const pages = document.querySelectorAll('.page');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('data-target');
+            
+            // Update active styling on nav
+            navLinks.forEach(l => l.classList.remove('active-link'));
+            link.classList.add('active-link');
+
+            // Hide all pages, show target
+            pages.forEach(page => {
+                if(page.id === targetId) {
+                    page.classList.add('active');
+                    page.classList.remove('hidden');
+                } else {
+                    page.classList.remove('active');
+                    page.classList.add('hidden');
+                }
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+    
+    // Set 'home' as initially active link
+    navLinks[0].classList.add('active-link');
+
+    // 4. Time-Lock Logic for May 10th Vault
+    const vaultLocked = document.getElementById('vault-locked');
+    const vaultUnlocked = document.getElementById('vault-unlocked');
+    const countdown = document.getElementById('countdown');
+
+    function checkVaultDate() {
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        // Month is 0-indexed in JS (January is 0, May is 4)
+        let targetDate = new Date(currentYear, 4, 10); 
+        
+        // Check if today is same day or after May 10th
+        if ((today.getMonth() === 4 && today.getDate() >= 10) || today.getMonth() > 4) {
+            // Vault is Unlocked!
+            vaultLocked.classList.remove('active');
+            vaultLocked.classList.add('hidden');
+            
+            vaultUnlocked.classList.remove('hidden');
+            vaultUnlocked.classList.add('active');
+        } else {
+            // Vault is Locked (Before May 10th)
+            vaultLocked.classList.remove('hidden');
+            vaultLocked.classList.add('active');
+            
+            vaultUnlocked.classList.remove('active');
+            vaultUnlocked.classList.add('hidden');
+
+            // Calculate days remaining
+            const offsetTarget = new Date(targetDate);
+            offsetTarget.setHours(0,0,0,0);
+            const offsetToday = new Date(today);
+            offsetToday.setHours(0,0,0,0);
+
+            const diffTime = offsetTarget - offsetToday;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            countdown.textContent = `متبقِ ${diffDays} يوم`;
+        }
+    }
+    
+    // Execute check
+    checkVaultDate();
+
+    // 5. Image Click Messages Modal
+    const cards = document.querySelectorAll('.card');
+    const msgModal = document.getElementById('message-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const modalMessage = document.getElementById('modal-message');
+
+    const customMessages = [
+        "أجمل صدفة في حياتي بجد ❤️",
+        "ضحكتك في الصورة دي بتنور دنيتي وبتاخد قلبي ✨",
+        "مش متخيل حياتي من غيرك لحظة واحدة 🥺",
+        "كل لحظة معاكي بتتحفر في قلبي ومش بنساها 💕",
+        "بحبك أكتر ما الكلمات تقدر توصف 💖",
+        "إنتي أجمل حاجة حصلتلي في عمري كله 💗",
+        "عيونك دي حكاية تانية خالص بتوه فيها 💘",
+        "ربنا يخليكي ليا دايماً وميحرمنيش منك أبداً 💞",
+        "بحبك كل يوم أكتر من اللي قبله، إنتي روحي ❣️",
+        "أغلى إنسانة على قلبي، بحبك 🫶" // fallback
+    ];
+
+    cards.forEach((card, index) => {
+        // Add pointer cursor
+        card.style.cursor = 'pointer';
+        
+        card.addEventListener('click', () => {
+            modalMessage.textContent = customMessages[index] || "بحبك جداً";
+            msgModal.classList.remove('hidden');
+            msgModal.classList.add('active');
+        });
+    });
+
+    closeModal.addEventListener('click', () => {
+        msgModal.classList.remove('active');
+        // Match CSS transition duration
+        setTimeout(() => msgModal.classList.add('hidden'), 300);
+    });
+
+    // Close when clicking outside the box
+    msgModal.addEventListener('click', (e) => {
+        if (e.target === msgModal) {
+            closeModal.click();
+        }
+    });
+
+    // 6. Inject 50 Romantic Messages
+    const messagesContainer = document.querySelector('.messages-container');
+    if (messagesContainer) {
+        messagesContainer.innerHTML = ''; // Ensure it's clean
+        const longMessages = [
+            "صباح الخير لأجمل حاجة حصلتلي في دنيتي. يا ندى، بمجرد ما بفتح عيني الصبح وأفتكر إنك في حياتي، بحس إن يومي بيبدأ بطاقة متتوصفش. إنتي شمس يومي اللي بتنورلي طريقي وبتدفي قلبي، خدي بالك من نفسك النهاردة يا روحي.",
+            "يا صباح الفل والياسمين على عيون ندى اللي سحرتني. حبيت أكون أول واحد يطمن عليكي ويقولك إنك وحشتيني من امبارح. ضحكتك دي هي البنزين اللي بكمل بيه يومي، يا رب يومك يكون رايق وجميل شبه قلبك الأبيض.",
+            "صباح الجمال على ست البنات. كل يوم الصبح بحمد ربنا إنه رزقني بيكي. إنتي النعمة اللي خايف عليها من زوالها، بدعيلك في بداية اليوم ربنا يوفقك ويسعدك وميحرمنيش من وجودك في تفاصيل يومي أبداً. بحبك.",
+            "قومي يلا يا كسلانة نوري الدنيا! صباح الخير على حب عمري. طول ما إنتي معايا بحس إن مفيش حاجة صعبة، وإن أي تعب بيهون عشانك. ركزي في يومك وخليكي فاكرة إن سليم بيحبك وبيدعمك في كل خطوة.",
+            "صباح الرضا والسعادة على قلبي أنا. يا ندى كل ما الشمس تطلع بفتكر وشك المنور وضحكتك اللي بتخطفني. يومي ملوش طعم من غير تصبيحتك، يا رب أشوفك دايماً فرحانة ومبسوطة لأن فرحتك هي فرحتي.",
+            "يا صباح الحب والشوق. فتحت عيني ملقتش غير صورتك قدامي. إنتي أول فكرة بتيجي في بالي الصبح وآخر فكرة قبل ما أنام. ربنا يجعل يومك مليان بالخير ويكفيكي شر أي حاجة تضايقك يا ست الكل.",
+            "صباح الخير يا عوضي الحلو. أنا بقيت بحب الصبح بس عشان أسمع صوتك وأطمن إنك بخير. يا ندى إنتي غيرتي معنى الأيام في عيني، خليتي لكل حاجة طعم ولون مختلف. بحبك قد الدنيا دي كلها.",
+            "صباح الفل على أغلى إنسانة في حياتي. عارفة؟ أنا ممكن أستغنى عن أي حاجة في يومي إلا رسالتك بتاعة الصبح. خليكي دايماً فاكرة إنك قوية وجميلة وتقدرى تعملي أي حاجة، وأنا دايماً في ضهرك.",
+            "يا صباح الورد اللي مفتح في قلبي. كل يوم بيعدي وأنا معاكي بتأكد إنك أجمل اختيار اخترته في حياتي. يلا ابدأي يومك بابتسامتك الحلوة دي اللي بتخلي الدنيا كلها تضحكلي. بموت فيكي.",
+            "صباح النور والسرور على حبيبة قلبي وروح روحي. أنا بس حبيت أبعتلك الطاقة الإيجابية دي عشان تكسري بيها الدنيا النهاردة. ندى، إنتي الإلهام بتاعي وأكتر حد مصدق فيا، وصباحي مبيكملش غير بيكي.",
+            "قبل ما تنامي يا حبيبتي، حبيت أقولك إنك وحشتيني. الليل بيبقى هادي بزيادة، بس قلبي مبيبطلش دقات عشانك. روحي بتسافر ليكي كل ليلة عشان تحرسك، نامي وارتاحي واحلمي أحلام حلوة زيك.",
+            "اليوم خلص بكل دوشته، ومفضلش فيه غير صورتك اللي مابتفارقش خيالي. يا ندى إنتي النور اللي نور دنيتي والراحة اللي بلاقيها بعد التعب. تصبحي على ألف خير وصباحك هيبقى أحلى عشان إنتي فيه.",
+            "يا ست البنات، نامي وإنتي مطمنة إن في حد هنا بيعشق التراب اللي بتمشي عليه. كل ليلة بدعي ربنا يجمعني بيكي في بيت واحد عشان مخليكيش تنامي زعلانة ولا شايلة هم حاجة أبداً. تصبحي على حب وهنا.",
+            "قبل ما تغمضي عيونك الحلوين دول، افتكري إنك أهم حاجة في حياة سليم. أنا بنام وأنا بفكر فيكي وبصحى وأنا بدور عليكي. أحلام سعيدة يا حبيبتي، ويارب دايماً متجمعين على خير.",
+            "تصبحي على خير يا دنيتي. الليل ده كله بيطول أوي وأنا بعيد عنك، بس بهون على نفسي إني هكلمك الصبح. خدي بالك من نفسك في أحلامك، واستنيني عشان هجيلك فيها. بحبك يا ندى.",
+            "كل النجوم اللي في السما دي متجيش حاجة جنب لمعة عينيكي. أنا بحسد المخدة اللي نايمة عليها والغطا اللي مدفيكي. نامي يا روحي وارتاحي عشان تصحي بكامل طاقتك وجمالك. ليلة سعيدة عليكي.",
+            "أنا مش بعرف أنام غير لما أطمن عليكي وأقولك تصبحي على خير. إنتي مسك الختام ليومي، والبداية الحلوة لبكرة. يا رب قلبك يفضل مرتاح ومبسوط دايماً. تصبحي على سعادة بحجم الكون.",
+            "عارفة إحساس إنك تكوني تعبانة وعايزة تنامي بس في نفس الوقت مش عايزة تبطلي كلام مع الشخص اللي بتحبيه؟ أنا حاسس بكده دلوقتي. روحي نامي يا ندى عشان ترتاحي، وأنا هفضل أحبك حتى وأنا نايم.",
+            "يا قمر الليل المنور، نامي وسيبي هموم الدنيا عليا. أنا موجود عشان أشيل عنك وأفرحك. تصبحي على خير يا أغلى حاجة في دنيتي، مستني الصبح يطلع عشان أقولك صباح الخير من تاني.",
+            "في هدوء الليل ده، ببعتلك كل مشاعر الحب والشوق اللي في قلبي. إنتي نعمة ربنا ليا، والهدية اللي مش عايز غيرها. نامي قريرة العين يا حبيبة قلبي، بحبك.",
+            "يا ندى، أنا عمري ما تخيلت إن ممكن حد يدخل حياتي ويغيرها بالشكل الحلو ده. إنتي مش بس حبيبتي، إنتي الروح اللي ردت فيا، والنور اللي نور طريقي. كل يوم بصحى وأنا عارف إنك معايا، بحس إني ملكت الدنيا.",
+            "ساعات كتير بقعد أسرح وأفكر، أنا عملت إيه حلو عشان ربنا يرزقني بيكي؟ إنتي عوضي الحلو، السند اللي بتسند عليه لما بتعب، والقلب اللي بيحتويني. مهما الأيام عدت، حبي ليكي بيكبر وبيزيد كل ثانية.",
+            "عارفة إيه أكتر حاجة بحبها فيكي؟ إنك مش شبه حد. روحك، طيبتك، حنيتك، وحتى عصبيتك، كلها حاجات بتخليني أعشقك. إنتي تركيبة خطفت قلبي ومستحيل قلبي ده يدق لحد غيرك. إنتي وبس اللي مالية عيني.",
+            "لما بتبصيلي بحس إن كل مشاكل الدنيا بتختفي. عينيكي دي فيها سحر بيخليني أنسى أي تعب. أنا معاكي وفي ضهرك دايماً، ومش هسيب إيدك مهما حصل. إنتي الأمان اللي كنت بدور عليه طول عمري.",
+            "بحبك بطريقة متتوصفش، حب ميتكتبش في سطور ولا يتقال في كلام. أنا بحبك بقلبي وروحي وبكل حتة فيا. ندى، إنتي النبض اللي بيخليني عايش، وأنا مستعد أعمل أي حاجة في الدنيا بس عشان أشوفك مبسوطة.",
+            "إنتي السكينة اللي بتنزل على قلبي في عز الزحمة والدوشة. لما بتكلم معاكي بحس إن روحي بترتاح. ربنا يخليكي ليا وميحرمنيش من حنيتك وطيبتك، ويقدرني دايماً أسعدك وأعوضك عن أي حاجة وحشة شفتيها.",
+            "في وسط كل التعب اللي بشوفه في دنيتي ومستقبلي، إنتي الحافز الوحيد اللي بيخليني أكمل. بشوف فيكي راحتي، ونجاحي ملوش طعم من غير ما أشاركك فيه. إنتي شريكة الرحلة وأجمل محطة فيها.",
+            "أنا لو فضلت أوصفلك إنتي غالية عندي قد إيه، مش هيكفيني عمري كله. إنتي الحتة النضيفة اللي في حياتي، العكاز اللي بتسند عليه، الحضن اللي بستخبى فيه من قسوة الأيام. يا رب تفضلي منورة دنيتي دايماً.",
+            "مش محتاج أكتر من إنك تفضلي جنبي. وجودك بيطمني وبيخليني أحس إن الدنيا لسه بخير. يا ندى إنتي غيرتي فيا حاجات كتير للأحسن من غير ما تحسي، حبك قواني وخلاني إنسان أفضل. شكراً إنك في حياتي.",
+            "عارفة الحب اللي بييجي مرة واحدة في العمر؟ إنتي الحب ده. إنتي الصدفة اللي بتمناها تتكرر كل يوم، والقدر اللي راضي بيه ومبسوط. أنا كلي ملكك، وقلبي ده مبيعرفش ينبض غير ليكي.",
+            "أنا مش عارف الوقت بيمشي بطيء كده ليه وانتي بعيدة عني! كل دقيقة بتعدي وإحنا مش بنتكلم بحس إنها سنة. وحشتيني ووحشني كلامنا وضحكنا. يا ندى إنتي حتة من روحي، وبحس إن في حاجة ناقصاني من غيرك.",
+            "وأنا قاعد دلوقتي وسط زحمة يومي، لقيت نفسي ببتسم لوحدي، ولما سألت نفسي ليه، لقيت صورتك قدام عيني. حبيت بس أقولك إنك على بالي ومفارقتيش تفكيري لحظة. ربنا يجمعني بيكي قريب يا أحلى صدفة.",
+            "الشوق ليكي متعب أوي يا ندى. ببقى عايز أسيب كل حاجة في إيدي وأجيلك بس عشان أشوفك وتطمني. غيابك عني ولو لساعات بيقلب كياني. مستني اللحظة اللي هشوفك فيها بفارغ الصبر عشان قلبي يهدى.",
+            "كل أغنية رومانسية بسمعها بتفكرني بيكي، كل مكان حلو بروحه بتمنى تكوني معايا فيه. إنتي مش بس واخدة تفكيري، إنتي واخدة حياتي كلها. وحشتيني بشكل ميتوصفش، وحشني صوتك اللي بيرد فيا الروح.",
+            "بيقولوا البعيد عن العين بعيد عن القلب، بس هما ميعرفوش إنك أبعد الناس عن عيني بس أقربهم لقلبي وروحي. المسافات دي مجرد أرقام، لكن حبك محفور جوة قلبي ومبيقلش أبداً، بالعكس الشوق بيكبره.",
+            "أنا ممكن أكون بكلم ناس كتير وبشوف ناس أكتر، بس عيني مبتدورش غير عليكي، وقلبي مبيحسش بحد غيرك. غيابك بيطفي النور اللي جوايا، ومفيش حاجة بترجعه غير ضحكتك وصوتك. وحشتيني يا ست البنات.",
+            "وحشني تفاصيلك الصغيرة، عصبيتك من الحاجات التافهة، ضحكتك اللي بتطلع من القلب، حتى طريقتك وانتي بتصالحيني. أنا مدمن لكل حاجة فيكي، والغياب عنك أعراض انسحابه صعبة أوي عليا.",
+            "كل يوم بيعدي وإنتي مش قصاد عيني بعتبره يوم ضايع من عمري. إنتي الفرحة اللي بستناها، والهدية اللي ربنا كرمني بيها. يا رب الأيام تجري بسرعة وأشوفك عشان أطفي نار الشوق اللي في قلبي دي.",
+            "لو كان ينفع أسرقك من الدنيا كلها وأخبيكي جوة قلبي كنت عملتها. أنا بغير عليكي من الهوا اللي بتتنفسيه، وبشتاقلك وإنتي معايا، فما بالك وإنتي بعيدة؟ ارجعيلي بسرعة عشان سليم مبيعرفش يعيش من غير نداه.",
+            "بتوحشيني في كل ثانية باخد فيها نفس. الشوق ليكي مش مجرد إحساس، ده حالة بعيشها في كل لحظة مش بشوفك فيها. أنا بحبك أوي، ومستني أشوفك عشان أقولهالك في عينيكي مش في رسالة.",
+            "كل ما بفكر في بكرة، مابشوفش فيه غيرك. إنتي الحلم اللي بسعى عشانه، والأمل اللي مخليني عايز أكون أحسن وأعافر في الدنيا. أنا ببني أحلامي كلها عليكي، ومستني اليوم اللي يجمعنا فيه بيت واحد، وأصحى كل يوم على وشك.",
+            "أنا بوعدك يا ندى إني هفضل معاكي وفي ضهرك مهما حصل. هكون ليكي الأب والأخ والصاحب قبل الحبيب. هعافر عشان أوصلك وأخليكي أسعد واحدة في الدنيا. إنتي تستاهلي كل حاجة حلوة، وتستاهلي إني أحارب الدنيا عشانك.",
+            "شايف فيكي أم عيالي، وشريكة حياتي اللي هكبر معاها وتكبر معايا. بتخيل تفاصيل بيتنا وضحكنا ومشاكلنا الصغيرة اللي هنحلها وإحنا ماسكين إيد بعض. بكرة بتاعنا، وأنا واثق إن ربنا هيكتبلنا الخير مع بعض.",
+            "عارف إن الطريق ممكن يكون طويل وفيه مطبات، بس طول ما إنتي معايا أنا مش خايف من حاجة. هدفنا واحد وحلمنا واحد، وأنا عمري ما هتخلى عن حلمي اللي هو إنتي. ربنا يقدرني وألبسك الدبلة وأخليكي ملكة متوجة في قلبي وبيتي.",
+            "كل خطوة باخدها في مستقبلي، باخدها وأنا حاطط صورتك قدام عيني. نجاحي ملوش معنى من غيرك، وتعبي كله بيهون عشان لحظة واحدة أرفع فيها راسك وأكون الراجل اللي تستحقيه وتفتخري بيه. بحبك يا مستقبل سليم.",
+            "بوعدك إني عمري ما هنام وإنتي زعلانة مني، وإني هفضل أسمعك وأفهمك حتى في اللحظات اللي إنتي مش فاهماها في نفسك. هكون حضنك الدافي وملاذك الآمن من قسوة الدنيا. عهد عليا قدام ربنا إني هصونك وأشيلك جوة عيني.",
+            "بتخيل اليوم اللي هصحى فيه ألاقيكي بتعمليلي القهوة، ونقعد نفطر مع بعض قبل ما أنزل شغلي. التفاصيل البسيطة دي معاكي هي أكبر أحلامي. يا رب عجل باليوم اللي هتبقي فيه حلالي ونصيبي قدام الدنيا كلها.",
+            "إنتي مش بس حبيبة فترة وهتعدي، إنتي قرار حياة. أنا اخترتك من بين كل الناس عشان تكملي معايا بقية عمري. مهما قابلنا من صعاب، إيدينا في إيد بعض هنعديها. بكرة أحلى عشان إحنا فيه سوا يا روح قلبي.",
+            "لما بنعجز ووشنا يكرمش، بوعدك إني هفضل أشوفك أجمل بنت في الدنيا. حبي ليكي مش حب شكل ومظاهر، ده حب روح، والروح مبتعجزش أبداً. هفضل أحبك لآخر نفس في عمري، وهتفضلي ندى طفلتي المدللة.",
+            "يا رب زي ما جمعت قلوبنا في الدنيا على الحب، تجمعنا تحت سقف واحد في الحلال. أنا بعافر وبسعى عشانك، وكل دعوة في صلاتي بيكون اسمك فيها. استنيني يا ندى، سليم جاي عشان ياخدك ويطير بيكي في سابع سما."
+        ];
+
+        longMessages.forEach((msg, index) => {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+            
+            const p = document.createElement('p');
+            p.textContent = msg;
+            
+            const span = document.createElement('span');
+            span.classList.add('date');
+            span.textContent = "رسالة رقم " + (index + 1) + " ❤️";
+            
+            msgDiv.appendChild(p);
+            msgDiv.appendChild(span);
+            messagesContainer.appendChild(msgDiv);
+        });
+    }
+
+    // 7. Voice Note Logic
+    const voiceAudio = document.getElementById('voice-audio');
+    if (voiceAudio) {
+        voiceAudio.addEventListener('play', () => {
+            bgMusic.pause();
+        });
+        
+        voiceAudio.addEventListener('pause', () => {
+            if (mainContent.classList.contains('active')) {
+                bgMusic.play().catch(() => {});
+            }
+        });
+
+        voiceAudio.addEventListener('ended', () => {
+            if (mainContent.classList.contains('active')) {
+                bgMusic.play().catch(() => {});
+            }
+        });
+    }
+
+    // 8. Random Reasons Logic
+    const reasonBtn = document.getElementById('reason-btn');
+    const reasonText = document.getElementById('reason-text');
+    
+    const reasons = [
+        "عشان حنيتك اللي بتنسيني تعب اليوم كله.",
+        "عشان ضحكتك اللي بتنور دنيتي وتفرح قلبي.",
+        "عشان فيكي طيبة ورقة مفيش زيهم في الدنيا.",
+        "عشان كل مرة ببص في عينيكي بشوف فيها الأمان.",
+        "عشان إنتي الروح اللي ردت فيا وغيرتني للأحسن.",
+        "عشان ببساطة مفيش حد تاني ممكن يملا عيني غيرك.",
+        "عشان طريقتك العفوية في الكلام بتخطف قلبي.",
+        "عشان إنتي دعوة من ربنا استجابها ليا في وقتها.",
+        "عشان أجدع بنت شُفتها، ودايماً سندي وفي ضهري.",
+        "عشان زُعلك طفولي ورضاكي سريع، وقلبك أبيض زي الفل.",
+        "عشان كل ما بتعصب بتعرفي إزاي تمتصي غضبي وتهديني.",
+        "عشان إنتي أول حد بفكر فيه لما أصحى، وآخر حد قبل ما أنام.",
+        "عشان إنتي مش بس حبيبتي، إنتي بنتي وصاحبتي وكل دنيتي.",
+        "عشان أنا بحس إني ملكت الدنيا كلها وإنتي معايا وفي حضني.",
+        "عشان عصبيتك اللي من غير مبرر دي قمر وبتعجبني.",
+        "عشان خوفك عليا واهتمامك بأدق تفاصيلي بيحسسني إني مهم.",
+        "عشان حلاوتك وجمالك اللي مبيخلصوش وبتزيدي حلاوة كل يوم.",
+        "عشان إنتي العكاز اللي بتسند عليه في أيامي الصعبة.",
+        "عشان بتآمني بيا وتدعميني في أحلامي مهما كانت مجنونة.",
+        "عشان ببساطة.. أنا اتخلقت عشان أحبك إنتي وبس."
+    ];
+
+    if (reasonBtn && reasonText) {
+        reasonBtn.addEventListener('click', () => {
+            // Fade out
+            reasonText.classList.add('hidden');
+            
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * reasons.length);
+                reasonText.textContent = reasons[randomIndex];
+                // Fade in
+                reasonText.classList.remove('hidden');
+            }, 300); // Wait for CSS transition
+        });
+    }
+
+});

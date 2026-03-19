@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nada - قلب ندى</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div id="hearts-container"></div>
+
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="audio/WhatsApp Audio 2026-03-19 at 6.22.51 PM.mpeg" type="audio/mpeg">
+    </audio>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-box">
+            <h1>للدخول إلى قلبى</h1>
+            <p>أدخلي كلمة السر الثابتة بيننا</p>
+            <input type="password" id="password-input" placeholder="كلمة السر...">
+            <button id="login-btn">دخول</button>
+            <p id="error-msg" class="hidden">الكلمة غير صحيحة، حاولي مرة أخرى ❤️</p>
+        </div>
+    </div>
+
+    <!-- Main Content (SPA inside) -->
+    <div id="main-content" class="screen hidden">
+        <nav class="navbar">
+            <ul>
+                <li><a href="#" data-target="home">الرئيسية</a></li>
+                <li><a href="#" data-target="gallery">لحظاتنا</a></li>
+                <li><a href="#" data-target="messages">رسائلي</a></li>
+                <li><a href="#" data-target="description">في وصف ندى</a></li>
+                <li><a href="#" data-target="voice">رسالتي بصوتي</a></li>
+                <li><a href="#" data-target="vault">اجمل يوم في السنه</a></li>
+            </ul>
+        </nav>
+
+        <main id="pages">
+            <!-- Home Page -->
+            <section id="home" class="page active">
+                <div class="welcome-container">
+                    <h2>نورتي قلبي يا</h2>
+                    <h1 class="neon-name">ندى</h1>
+                    <p>بحبك بكل تفاصيلك و حبيت اجمع حبه من حبي ليكي هنا عشان يفضلو جمبك طول العمر.</p>
+                    
+                    <div class="reasons-container">
+                        <button id="reason-btn" class="romantic-btn">أصل أنا بحبك عشان...</button>
+                        <p id="reason-text" class="hidden"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Page -->
+            <section id="gallery" class="page hidden">
+                <h2>معرض ذكرياتنا</h2>
+                <div class="grid-container">
+                    <div class="card">
+                        <img src="pics/1.png.jpeg" alt="صورة 1" class="gallery-img">
+                        <p class="caption">صورة ١ ❤️</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/2.png.jpeg" alt="صورة 2" class="gallery-img">
+                        <p class="caption">صورة ٢ ✨</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/3.png.jpeg" alt="صورة 3" class="gallery-img">
+                        <p class="caption">صورة ٣ 🥺</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/4.png.jpeg" alt="صورة 4" class="gallery-img">
+                        <p class="caption">صورة ٤ 💕</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/5.png.jpeg" alt="صورة 5" class="gallery-img">
+                        <p class="caption">صورة ٥ 💖</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/6.png.jpeg" alt="صورة 6" class="gallery-img">
+                        <p class="caption">صورة ٦ 💗</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/7.png.jpeg" alt="صورة 7" class="gallery-img">
+                        <p class="caption">صورة ٧ 💘</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/8.png.jpeg" alt="صورة 8" class="gallery-img">
+                        <p class="caption">صورة ٨ 💞</p>
+                    </div>
+                    <div class="card">
+                        <img src="pics/9.png.jpeg" alt="صورة 9" class="gallery-img">
+                        <p class="caption">صورة ٩ ❣️</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Messages Page -->
+            <section id="messages" class="page hidden">
+                <h2>رسائلي إليكِ</h2>
+                <div class="messages-container">
+                    <!-- Messages will be injected securely via script.js -->
+                </div>
+            </section>
+
+            <!-- Description Page -->
+            <section id="description" class="page hidden">
+                <h2>في وصف ندى</h2>
+                <div class="text-content">
+                    <p>لما بقعد مع نفسي بالليل والدنيا تهدى حواليا، وبكون خالي من كل دوشة اليوم، مفيش حاجة بتسحبني وتملى خيالي غيرها.. كأن عقلي بيرفض يفكر في أي حاجة تانية غير تفاصيلها. دي مش مجرد بنت بحبها، دي حالة تلبستني، سحر ماشي في دمي مش عايز أشفى منه.</p>
+                    
+                    <h3 style="color: var(--primary-color); margin-top: 1.5rem; font-family: var(--font-heading); text-shadow: 0 0 10px rgba(255,26,26,0.5); font-size: 2rem;">لو هكلم نفسي عن عينيها..</h3>
+                    <p>عينيها دي بوابات لعالم أنا بس اللي مسموحلي أدخله. مش مجرد لون وشكل، دي بحر غويط ملوش قرار، كل ما أسرح فيه أغرق أكتر، وأنا بصراحة غرقان ومبسوط ومش عايز أي طوق نجاة. اللمعة اللي بتنور في عينيها فجأة وهي متحمسة بتحكيلي عن حاجة، ولا لمعة الدموع اللي بتظهر من أقل حاجة عشان قلبها رهيف، بتخطف قلبي من بين ضلوعي. رموشها وهي بتداري النظرة بخجل، كأنها ستاير حرير بتنزل تطبطب على روحي. النظرة الواحدة منها قادرة تسكت كل الدوشة اللي في دماغي، بتطمني إن مهما الدنيا كانت صعبة وقاسية، أنا ليا ملاذ أمن بهرب ليه واستخبى فيه. لغة عينيها بتكلمني من غير ولا حرف، ببقى عارف هي زعلانة، فرحانة، أو حتى محتاجاني من غير ما تنطق.</p>
+                    
+                    <h3 style="color: var(--primary-color); margin-top: 1.5rem; font-family: var(--font-heading); text-shadow: 0 0 10px rgba(255,26,26,0.5); font-size: 2rem;">ولو فكرت في ملامحها وابتسامتها..</h3>
+                    <p>أول ما وشها بينور بابتسامة، بحس إن في شمس طلعت جوه صدري بتدفي كل حتة بردانة جوايا. ابتسامتها فيها براءة أطفال بتغسلني من جوا، بتخليني غصب عني أبتسم وأنا باصصلها ومسحور بيها، بنسى أنا كنت متضايق من إيه أصلاً. حتى وهي مكشرة ومقموصة وبتضرب بوز زي طفلة صغيرة اتاخدت منها لُعبتها.. بتبقى في قمة الرقة، وببقى عايز أخدها في حضني وأصالحها حتى لو أنا اللي زعلان.</p>
+                    
+                    <h3 style="color: var(--primary-color); margin-top: 1.5rem; font-family: var(--font-heading); text-shadow: 0 0 10px rgba(255,26,26,0.5); font-size: 2rem;">أما صوتها وضحكتها..</h3>
+                    <p>يا الله على رنة صوتها.. مش مجرد موجات صوت عادية، دي مزيكا بتتعزف مخصوص عشان تروق دمي وتظبط مزاجي. بحب طريقتها في الكلام، مخارج حروفها، تنهيدتها اللي بتطلع من قلبها، وضحكتها اللي بترن في ودني فتخلي قلبي يرقص معاها. لما بكون في قمة تعبي، مجرد ما أسمع صوتها بس، بحس إن كل هموم الدنيا اتبخرت. حتى سكوتها، وهي بتسمعني، ليه لحن أنا مدمنه.</p>
+                    
+                    <h3 style="color: var(--primary-color); margin-top: 1.5rem; font-family: var(--font-heading); text-shadow: 0 0 10px rgba(255,26,26,0.5); font-size: 2rem;">حركاتها وتفاصيلها الصغيرة..</h3>
+                    <p>أنا حافظها أكتر من نفسي.. طريقتها العفوية وهي بتصلح شعرها، حركات إيديها وهي بتشرح حاجة ومنفعلة، نظرتها وهي مركزة في حاجة بتحبها. التفاصيل الصغيرة دي اللي ممكن محدش ياخد باله منها، بالنسبة لي هي أعظم لوحة فنية بتأملها كل يوم. حنيتها اللي بتغمرني من غير ما تقصد، خوفها عليا اللي بشوفه في عينيها قبل كلامها، طريقتها اللي بتحسسني إني أعظم حد في الدنيا بمجرد وجودي معاها.</p>
+                    
+                    <p style="font-weight: bold; font-size: 1.6rem; text-align: center; margin-top: 2.5rem; color: #ffb3b3; text-shadow: 0 0 15px rgba(255,26,26,0.6);">هي مش بس نصي التاني، هي الروح اللي ردت فيا، هي الدفا في عز البرد، والنور في عز العتمة.<br>كل ما أسرح فيها بكتشف إني مش بس بحبها، أنا بتنفسها، ومكتفي بيها عن الدنيا كلها..<br>ومستعد أفضل أكلم نفسي وأوصف فيها سنين من غير ما أزهق لحظة واحدة.</p>
+                </div>
+            </section>
+
+            <!-- Voice Note Page -->
+            <section id="voice" class="page hidden">
+                <div class="voice-container">
+                    <h2>رسالة من قلبي بصوتي</h2>
+                    <p>عشان تسمعي صوتي وتعرفي قد إيه إنتي غالية عندي في أي وقت تحبيه..</p>
+                    <div class="audio-wrapper">
+                        <audio id="voice-audio" controls controlsList="nodownload">
+                            <source src="audio/ةثسسشلث.mp4" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوت.
+                        </audio>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Birthday Vault Page -->
+            <section id="vault" class="page hidden">
+                <div id="vault-locked" class="vault-container active">
+                    <div class="lock-icon">🔒</div>
+                    <h2>يوم مميز قادم...</h2>
+                    <p>سيتم فتح هذه الصفحة يوم ١٠ مايو.</p>
+                    <div id="countdown"></div>
+                </div>
+                <div id="vault-unlocked" class="vault-container hidden">
+                    <div class="unlock-icon">🎉</div>
+                    <h2>كل سنة وإنتي طيبة يا ندى!</h2>
+                    <p>النهاردة عيد ميلاد أغلى إنسانة في حياتي، كل سنة وإنتي محققة كل أحلامك ومبسوطة.</p>
+                    <p>بحبك جداً.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
