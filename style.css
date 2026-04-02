@@ -573,6 +573,52 @@ h2 {
 .modal.active .modal-content {
     transform: translateY(0);
 }
+/* Message 100 Section */
+#message-100 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+
+.message-100-container {
+    background: linear-gradient(135deg, rgba(60, 0, 10, 0.9), rgba(20, 0, 0, 0.95));
+    border: 2px solid var(--primary-color);
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255, 26, 26, 0.4), inset 0 0 20px rgba(255, 26, 26, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 1.5s ease;
+}
+
+.message-100-container::before {
+    content: '👑';
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    font-size: 8rem;
+    opacity: 0.1;
+    transform: rotate(20deg);
+}
+
+.message-100-container h2 {
+    font-size: 3rem;
+    color: #ffcccc;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 15px rgba(255, 26, 26, 0.8);
+}
+
+.message-100-container p {
+    font-size: 1.6rem;
+    line-height: 2;
+    color: white;
+    font-family: var(--font-heading);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
 
 .close-modal {
     position: absolute;
