@@ -114,6 +114,218 @@ body {
     z-index: 10;
 }
 
+/* Envelope Screen */
+#envelope-screen {
+    justify-content: center;
+    align-items: center;
+    background: rgba(10, 0, 0, 0.9);
+    z-index: 15;
+}
+
+.envelope-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background: #800000; /* Inside back of envelope */
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(255,26,26,0.2);
+    transition: transform 0.3s ease;
+    margin-top: 2rem;
+}
+
+.envelope:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(255,26,26,0.4);
+}
+
+.envelope.open {
+    cursor: default;
+    transform: translateY(30px);
+}
+
+.envelope.open:hover {
+    transform: translateY(30px);
+    box-shadow: 0 10px 30px rgba(255,26,26,0.2);
+}
+
+#envelope-title {
+    color: white;
+    font-family: var(--font-heading);
+    margin-bottom: 2rem;
+    text-shadow: 0 0 15px rgba(255,26,26,0.8);
+    text-align: center;
+    font-size: 2.2rem;
+    animation: pulse 2s infinite;
+    transition: opacity 0.5s ease;
+}
+
+/* Front fold - Top Flap */
+.envelope .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 110px solid #cc0000;
+    z-index: 4;
+    transform-origin: top;
+    transition: transform 0.6s ease, z-index 0s 0.3s;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+}
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1; 
+}
+
+/* Front pocket pieces */
+.envelope .pocket-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-left: 150px solid #e60000;
+    z-index: 3;
+}
+
+.envelope .pocket-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-right: 150px solid #e60000;
+    z-index: 3;
+}
+
+.envelope .pocket-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 105px solid #ff1a1a;
+    z-index: 3;
+}
+
+/* Letter */
+.envelope .letter {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    right: 10px;
+    bottom: 5px;
+    background: #fff;
+    border-radius: 5px;
+    z-index: 2; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.8s 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.8s 0.4s ease, opacity 0.8s 0.4s ease;
+    opacity: 0;
+    height: 190px;
+    background: linear-gradient(135deg, #fff, #ffe6e6);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar for letter */
+.envelope .letter::-webkit-scrollbar {
+    width: 6px;
+}
+.envelope .letter::-webkit-scrollbar-track {
+    background: transparent;
+}
+.envelope .letter::-webkit-scrollbar-thumb {
+    background: rgba(255, 26, 26, 0.3);
+    border-radius: 5px;
+}
+.envelope .letter::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 26, 26, 0.6);
+}
+
+.envelope.open .letter {
+    transform: translateY(-160px);
+    height: 350px;
+    opacity: 1;
+    z-index: 5;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+}
+
+.envelope .letter p {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: #4d0000;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.envelope .letter button {
+    padding: 10px 25px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 10px rgba(255,26,26,0.3);
+}
+
+.envelope .letter button:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(255,26,26,0.5);
+}
+
+/* Responsive constraints for Envelope */
+@media (max-width: 450px) {
+    .envelope {
+        transform: scale(0.9);
+        margin-top: 1rem;
+    }
+    .envelope:hover {
+        transform: translateY(-5px) scale(0.9);
+    }
+    .envelope.open {
+        transform: translateY(20px) scale(0.9);
+    }
+    .envelope.open:hover {
+        transform: translateY(20px) scale(0.9);
+    }
+    #envelope-title {
+        font-size: 1.8rem;
+    }
+    .envelope .letter p {
+        font-size: 1.05rem;
+        line-height: 1.5;
+    }
+    .envelope.open .letter {
+        height: 320px;
+        transform: translateY(-150px);
+    }
+}
+
 /* Login */
 #login-screen {
     justify-content: center;
@@ -573,6 +785,30 @@ h2 {
 .modal.active .modal-content {
     transform: translateY(0);
 }
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: transform 0.3s, color 0.3s;
+}
+
+.close-modal:hover {
+    color: white;
+    transform: rotate(90deg);
+}
+
+#modal-message {
+    font-size: 1.5rem;
+    color: white;
+    line-height: 1.8;
+    font-family: var(--font-heading);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
 /* Message 100 Section */
 #message-100 {
     display: flex;
@@ -616,29 +852,6 @@ h2 {
     font-size: 1.6rem;
     line-height: 2;
     color: white;
-    font-family: var(--font-heading);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.close-modal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    cursor: pointer;
-    transition: transform 0.3s, color 0.3s;
-}
-
-.close-modal:hover {
-    color: white;
-    transform: rotate(90deg);
-}
-
-#modal-message {
-    font-size: 1.5rem;
-    color: white;
-    line-height: 1.8;
     font-family: var(--font-heading);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
