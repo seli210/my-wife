@@ -39,9 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 loginScreen.style.display = 'none';
                 
-                // Fade in main content
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('active');
+                // Fade in envelope screen
+                const envelopeScreen = document.getElementById('envelope-screen');
+                envelopeScreen.style.display = 'flex';
+                // Trigger reflow to ensure transition works
+                void envelopeScreen.offsetWidth;
+                envelopeScreen.classList.remove('hidden');
+                envelopeScreen.classList.add('active');
                 
                 // Play music
                 bgMusic.volume = 0.5;
@@ -61,6 +65,42 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') attemptLogin();
     });
+
+    // Envelope Logic
+    const envelope = document.getElementById('envelope-element');
+    const envelopeTitle = document.getElementById('envelope-title');
+    const enterSiteBtn = document.getElementById('enter-site-btn');
+    const envelopeScreen = document.getElementById('envelope-screen');
+
+    if (envelope) {
+        envelope.addEventListener('click', () => {
+            if (!envelope.classList.contains('open')) {
+                envelope.classList.add('open');
+                envelopeTitle.style.opacity = '0';
+                setTimeout(() => {
+                    envelopeTitle.style.visibility = 'hidden';
+                }, 500);
+            }
+        });
+    }
+
+    if (enterSiteBtn) {
+        enterSiteBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent clicking the envelope beneath
+            
+            // Fade out envelope
+            envelopeScreen.classList.remove('active');
+            envelopeScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                envelopeScreen.style.display = 'none';
+                
+                // Fade in main content
+                mainContent.classList.remove('hidden');
+                mainContent.classList.add('active');
+            }, 1000);
+        });
+    }
 
     // 3. SPA Navigation Logic
     const navLinks = document.querySelectorAll('.navbar a');
@@ -233,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "بتخيل اليوم اللي هصحى فيه ألاقيكي بتعمليلي القهوة، ونقعد نفطر مع بعض قبل ما أنزل شغلي. التفاصيل البسيطة دي معاكي هي أكبر أحلامي. يا رب عجل باليوم اللي هتبقي فيه حلالي ونصيبي قدام الدنيا كلها.",
             "إنتي مش بس حبيبة فترة وهتعدي، إنتي قرار حياة. أنا اخترتك من بين كل الناس عشان تكملي معايا بقية عمري. مهما قابلنا من صعاب، إيدينا في إيد بعض هنعديها. بكرة أحلى عشان إحنا فيه سوا يا روح قلبي.",
             "لما بنعجز ووشنا يكرمش، بوعدك إني هفضل أشوفك أجمل بنت في الدنيا. حبي ليكي مش حب شكل ومظاهر، ده حب روح، والروح مبتعجزش أبداً. هفضل أحبك لآخر نفس في عمري، وهتفضلي ندى طفلتي المدللة.",
-                        "يا رب زي ما جمعت قلوبنا في الدنيا على الحب، تجمعنا تحت سقف واحد في الحلال. أنا بعافر وبسعى عشانك، وكل دعوة في صلاتي بيكون اسمك فيها. استنيني يا ندى، سليم جاي عشان ياخدك ويطير بيكي في سابع سما.",
+            "يا رب زي ما جمعت قلوبنا في الدنيا على الحب، تجمعنا تحت سقف واحد في الحلال. أنا بعافر وبسعى عشانك، وكل دعوة في صلاتي بيكون اسمك فيها. استنيني يا ندى، سليم جاي عشان ياخدك ويطير بيكي في سابع سما.",
             "إنتي أقوى وأجمل بنت عيني شافتها. لما بحس إني تعبت في أي حاجة في حياتي، بفتكر إنك واثقة فيا، فبقوم أكسر الدنيا، إنتي طاقتي بجد.",
             "يا ندى، أنا معاكي وفي ضهرك. لو كل الدنيا وقفت ضدك، أنا هقف في وش الدنيا كلها عشانك ومفيش حاجة هتهزني طول ما إنتي في حمايتي.",
             "إوعي تزعلي أو تشيلي هم حاجة طول ما أنا بتنفس. دمعتك غالية عليا أوي ومستعد أدفع عمري كله بس عشان أشوفك بتضحكي.",
@@ -283,7 +323,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "صوتك ده عامل زي العلاج السحري لأي وجع، لو أنا في قمة تعبي وسمعتك بتقولي \"يا سليم\"، بحس إن كل حاجة وحشة اختفت وبقيت أحسن واحد في الدنيا.",
             "أنا ممكن أتنازل عن أي حاجة في حياتي إلا إني أشوفك مبسوطة. فرحتك دي هي الغاية اللي أنا عايش عشانها، وكل ضحكة بتطلع منك بتطول في عمري.",
             "إحنا روح واحدة اتقسمت في جسمين. أنا بحس بيكي من غير ما تتكلمي، وبفهم عينيكي من نظرة. إنتي حتة مني يا ندى ومقدرش أعيش ولا يوم واحد من غيرك."
-
         ];
 
         longMessages.forEach((msg, index) => {
